@@ -1,0 +1,38 @@
+{
+    "name": "muffin/bot",
+    "description": "Muffin's bot",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jad Bitar",
+            "email": "jadb@cakephp.org"
+        },
+        {
+            "name": "ADmad",
+            "email": "admad@cakephp.org"
+        }
+    ],
+    "require": {
+        "cakephp/core": "~3.0",
+        "cakephp/orm": "~3.0",
+        "josegonzalez/dotenv": "~0.6",
+        "phergie/phergie-irc-bot-react": "~1.0",
+        "phergie/phergie-irc-plugin-react-autojoin": "~1.0",
+        "phergie/phergie-irc-plugin-react-command": "~1.0",
+        "phergie/phergie-irc-plugin-react-commandhelp": "~1.0",
+        "phergie/phergie-irc-plugin-react-eventfilter": "~1.0",
+        "phergie/phergie-irc-plugin-react-feedticker": "~1.0",
+        "phergie/phergie-irc-plugin-react-joinpart": "~1.0",
+        "phergie/phergie-irc-plugin-react-nickserv": "~1.0",
+        "phergie/phergie-irc-plugin-react-pong": "~1.0",
+        "phergie/phergie-irc-plugin-react-quit": "~1.0",
+        "wyrihaximus/phergie-dns": "~2.1",
+        "wyrihaximus/phergie-http": "~2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Muffin\\Bot\\Seen\\": "plugins/Seen/src"
+        }
+    },
+    "minimum-stability": "dev"
+}
