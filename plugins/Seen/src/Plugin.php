@@ -1,8 +1,8 @@
 <?php
 namespace Muffin\Bot\Seen;
 
-use Cake\Datasource\ConnectionManager;
 use Cake\Database\Schema\Table as Schema;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Evenement\EventEmitter;
 use Phergie\Irc\Bot\React\AbstractPlugin;
@@ -30,7 +30,7 @@ class Plugin extends AbstractPlugin
 
     protected $table;
 
-    public function __construct(array $config = []) 
+    public function __construct(array $config = [])
     {
         if (isset($config['connection'])) {
             $this->connection = $config['connection'];
@@ -50,7 +50,7 @@ class Plugin extends AbstractPlugin
         if (!in_array('seen_logs', $tables)) {
             $schema = new Schema('seen_logs', $columns);
             $schema->addConstraint('primary', [
-                'type' => 'primary', 
+                'type' => 'primary',
                 'columns' => ['server', 'channel', 'nick'],
             ]);
             $connection->query(implode(';', $schema->createSql($connection)));
@@ -611,7 +611,7 @@ class Plugin extends AbstractPlugin
         $channel = array_shift($params);
 
         $this->getLogger()->debug('Adding names to channel', array('server' => $server, 'channel' => $channel));
-        
+
         $names = (count($params) == 1) ? explode(' ', $params[0]) : $params;
 
         foreach (array_filter($names) as $name) {

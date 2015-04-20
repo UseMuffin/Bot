@@ -1,5 +1,7 @@
 <?php
 
+class_alias('Muffin\Bot\Notify\Plugin', 'Notify');
+class_alias('Muffin\Bot\Remember\Plugin', 'Remember');
 class_alias('Muffin\Bot\Seen\Plugin', 'Seen');
 class_alias('Phergie\Irc\Plugin\React\AutoJoin\Plugin', 'AutoJoin');
 class_alias('Phergie\Irc\Plugin\React\Command\Plugin', 'Command');
@@ -22,13 +24,7 @@ use Phergie\Irc\Plugin\React\EventFilter as Filter;
 SensitiveDataLoader::load([
     'filepath' => '.env',
     'expect' => [
-        // 'GITHUB_USER',
-        // 'GITHUB_TOKEN',
         'NICKSERV_PASSWORD',
-        // 'DATABASE_DEFAULT_HOST',
-        // 'DATABASE_DEFAULT_USER',
-        // 'DATABASE_DEFAULT_PASS',
-        // 'DATABASE_DEFAULT_NAME',
     ],
     'toEnv' => true,
     'raiseExceptions' => false,
@@ -36,7 +32,9 @@ SensitiveDataLoader::load([
 
 Configure::write([
     'Channels' => [
+        '#CakePHP' => '',
         '#FluxCTRL' => '',
+        '#FriendsOfCake' => '',
     ],
     'Datasources' => [
         'default' => [
@@ -56,42 +54,46 @@ Configure::write([
     'Plugins' => [
         'Pong',
         'Dns',
-        'Command',
         'CommandHelp',
         'Seen',
         'NickServ' => [
             'password' => $_ENV['NICKSERV_PASSWORD'],
         ],
-        'EventFilter' => [
-            'filter' => new Filter\UserFilter([
-                'jadb!~jadb@*',
-                'ADmad!*@*',
-                'jose_zap!*@*'
-            ]),
-            'plugins' => [
-                new JoinPart(),
-                new Quit(['message' => 'master %s ordered me to']),
-            ]
-        ]
     ],
 ]);
 
 ConnectionManager::config(Configure::consume('Datasources'));
 
-$connections = Configure::consume('Networks');
+$connections = Configure::read('Networks');
 $connections = array_map(function ($config) { return new Connection($config); }, $connections);
 
-$plugins = Configure::consume('Plugins') + [
+$plugins = Configure::read('Plugins') + [
+    'Command' => [
+        'prefix' => '~',
+        'nick' => true,
+    ],
     'AutoJoin' => [
         'channels' => array_keys(call_user_func_array(['Cake\Core\Configure', 'read'], ['Channels'])),
         'keys' => call_user_func_array(['Cake\Core\Configure', 'read'], ['Channels']),
     ],
+    'EventFilter' => [
+        'filter' => new Filter\UserFilter([
+            'jadb!~jadb@unaffiliated\\/jadb*',
+            'ADmad!~ADmad@unaffiliated\\/admad*',
+        ]),
+        'plugins' => [
+            new JoinPart(),
+            new Notify(),
+            new Remember(),
+            new Quit(['message' => 'master %s ordered me to']),
+        ]
+    ]
 ];
 
 foreach ($plugins as $plugin => $config) {
     unset($plugins[$plugin]);
     if (is_numeric($plugin)) {
-        $plugins[] = new $config();
+        $plugins[] = is_object($config) ? $config : new $config();
         continue;
     }
     $plugins[] = new $plugin($config);

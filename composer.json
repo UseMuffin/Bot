@@ -1,6 +1,7 @@
 {
     "name": "muffin/bot",
     "description": "Muffin's bot",
+    "type": "project",
     "license": "MIT",
     "authors": [
         {
@@ -31,7 +32,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Muffin\\Bot\\Seen\\": "plugins/Seen/src"
+            "Muffin\\Bot\\Seen\\": "plugins/Seen/src",
+            "Muffin\\Bot\\Remember\\": "plugins/Remember/src",
+            "Muffin\\Bot\\Notify\\": "plugins/Notify/src"
         }
     },
     "minimum-stability": "dev"
