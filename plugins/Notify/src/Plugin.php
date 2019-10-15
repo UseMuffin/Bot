@@ -5,6 +5,7 @@ use Cake\Database\Schema\Table as Schema;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Phergie\Irc\Bot\React\AbstractPlugin;
+use Phergie\Irc\Event\UserEventInterface;
 use Phergie\Irc\Bot\React\EventQueueInterface;
 use Phergie\Irc\Plugin\React\Command\CommandEvent;
 
